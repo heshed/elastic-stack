@@ -262,6 +262,21 @@ io.netty.handler.codec.DecoderException: javax.net.ssl.SSLHandshakeException: Re
 
 아직 원인 찾지 못함. elastic-agent yml 설정에 ssl 관련 설정 추가하는게 있어야 할 것같은데 reference 에서 찾지 못한 상태
 
+베타라 그런가 문서 설명이 부실하다.
+
+https://github.com/elastic/kibana/issues/73483
+```
+outputs:
+    default:
+      api_key: 7_uoA.....
+      hosts:
+      - https://elasticsearch:9200
+      type: elasticsearch
+      ssl.certificate_authorities: ["/home/jamie/Projects/GitRepo/apm-integration-testing/scripts/tls/ca/ca.crt"]
+```
+
+https://github.com/elastic/kibana/issues/75913
+이글 보면 최근까지 yml output에 추가할 cert 필드들에 대한 논의 진행중
 
 # alert & action
 
