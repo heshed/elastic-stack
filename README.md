@@ -124,7 +124,8 @@ cp elasticsearch-7.9.1/kibana/elasticsearch-ca.pem kibana-7.9.2-darwin-x86_64/co
 
 ## kibana 서버 ssl 셋팅
 ```
-mkcert -pkcs12 -p12-file kibana-server.p12 localhost 127.0.0.1 ::1
+mkcert -install
+mkcert -cert-file config/kibana-server-crt.pem -key-file config/kibana-server-key.pem localhost 127.0.0.1 ::1
 bin/kibana-keystore add server.ssl.keystore.password
 ```
 
@@ -134,14 +135,20 @@ bin/kibana-keystore add server.ssl.keystore.password
 ```yaml
 elasticsearch.username: "kibana_system"
 elasticsearch.password: "elastic"
+elasticsearch.hosts: ["https://localhost:9200"]
 elasticsearch.ssl.truststore.path: elastic-stack-ca.p12
 elasticsearch.ssl.truststore.password: ""
 elasticsearch.ssl.certificateAuthorities: [ "config/elasticsearch-ca.pem" ]
-elasticsearch.hosts: ["https://localhost:9200"]
-xpack.ingestManager.fleet.tlsCheckDisabled: true
-xpack.encryptedSavedObjects.encryptionKey: a123456789012345678901234567890b
+
 server.ssl.enabled: true
 server.ssl.keystore.path: "config/kibana-server.p12"
+server.ssl.certificate: "config/kibana-server-crt.pem"
+server.ssl.key: "config/kibana-server-key.pem"
+
+xpack.ingestManager.fleet.tlsCheckDisabled: true
+xpack.encryptedSavedObjects.encryptionKey: a123456789012345678901234567890b
+xpack.security.encryptionKey: "01234567890123456789012345678912"
+xpack.reporting.encryptionKey: "01234567890123456789012345678912"
 ```
 
 - TODO kibana https localhost 서빙이 되어야 한다.
