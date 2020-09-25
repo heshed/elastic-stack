@@ -225,6 +225,44 @@ elastic-agent 실행
 ./elastic-agent run
 ```
 
+## trouble shootings
+
+## elatstic-agent 설치 위치
+es 서버에 설치해야하나? 아니면 kibana 서버에 설치해야하는지? 
+아니면 모니터링 대상 서버에 하면 되나?
+
+### http(s) 통신
+ES 로그
+```
+[2020-09-25T12:57:00,579][WARN ][o.e.x.s.t.n.SecurityNetty4HttpServerTransport] [mdui-MacBookPro.local] received plaintext http traffic on an https channel, closing connection Netty4HttpChannel{localAddress=/127.0.0.1:9200, remoteAddress=/127.0.0.1:61533}
+```
+
+tls 통신만을 허용하는 상황에서 elastic-agent가 http 평문으로 통신을 시도하는 모양이다.
+
+9200 포트를 찾아서 https://localhost:9200 으로 변경을 해주었다.
+```
+grep 9200 *yml
+action_store.yml:      - https://localhost:9200
+elastic-agent.reference.yml:    hosts: [https://localhost:9200]
+elastic-agent.yml:    hosts: [https://localhost:9200]
+```
+
+다시 agent 실행
+```
+./elastic-agent run
+```
+
+이번에는 이런 ES에러가..
+
+```
+[2020-09-25T20:55:11,749][WARN ][o.e.h.AbstractHttpServerTransport] [mdui-MacBookPro.local] caught exception while handling client http traffic, closing connection Netty4HttpChannel{localAddress=/127.0.0.1:9200, remoteAddress=/127.0.0.1:50698}
+io.netty.handler.codec.DecoderException: javax.net.ssl.SSLHandshakeException: Received fatal alert: bad_certificate
+...
+```
+
+아직 원인 찾지 못함. elastic-agent yml 설정에 ssl 관련 설정 추가하는게 있어야 할 것같은데 reference 에서 찾지 못한 상태
+
+
 # alert & action
 
 - [Alerting and Actions](https://www.elastic.co/guide/en/kibana/7.9/alerting-getting-started.html)
