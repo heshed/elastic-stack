@@ -144,7 +144,6 @@ server.ssl.enabled: true
 server.ssl.certificate: "config/kibana-server-crt.pem"
 server.ssl.key: "config/kibana-server-key.pem"
 
-xpack.ingestManager.fleet.tlsCheckDisabled: true
 xpack.encryptedSavedObjects.encryptionKey: a123456789012345678901234567890b
 xpack.security.encryptionKey: "01234567890123456789012345678912"
 xpack.reporting.encryptionKey: "01234567890123456789012345678912"
