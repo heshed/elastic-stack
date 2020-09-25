@@ -162,7 +162,7 @@ Fleet 으로 진행해보자. 페이지를 열고 따라하기
 
 
 
-## [Mananual mode](https://www.elastic.co/guide/en/ingest-management/current/ingest-management-getting-started.html#agent-standalone-mode)
+## [Manual mode](https://www.elastic.co/guide/en/ingest-management/current/ingest-management-getting-started.html#agent-standalone-mode)
 
 ![](https://www.elastic.co/guide/en/ingest-management/current/images/kibana-ingest-manager-configurations-default-yaml.png)
 
