@@ -118,12 +118,18 @@ Changed password for user [elastic]
 tar xvfz kibana-7.9.2-darwin-x86_64.tar.gz
 cd kibana-7.9.2-darwin-x86_64
 
-# http pem 인증서를 복사
+# http pem 인증서를 복사 - elasticsearch 와 http tls 통신을 위해
 cp elasticsearch-7.9.1/kibana/elasticsearch-ca.pem kibana-7.9.2-darwin-x86_64/config
 ```
 
-## config/kibana.yml
+## kibana 서버 ssl 셋팅
+```
+mkcert -pkcs12 -p12-file kibana-server.p12 localhost 127.0.0.1 ::1
+bin/kibana-keystore add server.ssl.keystore.password
+```
 
+
+## config/kibana.yml
 
 ```yaml
 elasticsearch.username: "kibana_system"
@@ -134,6 +140,8 @@ elasticsearch.ssl.certificateAuthorities: [ "config/elasticsearch-ca.pem" ]
 elasticsearch.hosts: ["https://localhost:9200"]
 xpack.ingestManager.fleet.tlsCheckDisabled: true
 xpack.encryptedSavedObjects.encryptionKey: a123456789012345678901234567890b
+server.ssl.enabled: true
+server.ssl.keystore.path: "config/kibana-server.p12"
 ```
 
 - TODO kibana https localhost 서빙이 되어야 한다.
