@@ -152,17 +152,16 @@ Fleet 으로 진행해보자. 페이지를 열고 따라하기
 ## 최종 화면에 보이는 elastic-agent 커맨드를 수행
 
 ```console
-./elastic-agent enroll http://localhost:5601 ak9ENXdIUUJWWUZqWXVvUlpWTl86akJNSG10UHpRZVNGUnduNlN5QTV6Zw==
+#  --insecure 를 붙여줘야 한다
+./elastic-agent enroll http://localhost:5601 ak9ENXdIUUJWWUZqWXVvUlpWTl86akJNSG10UHpRZVNGUnduNlN5QTV6Zw== --insecure
 ./elastic-agent run
 ```
 
 ## In Ingest Manager, click Continue to go to the Fleet tab, where you should see the newly enrolled agent.
 
-이 화면이 나올거라는데.. nginx 를 안띄워놔서 그런가 빈화면만 보이고 있다.
 ![](https://www.elastic.co/guide/en/ingest-management/current/images/kibana-ingest-manager-fleet-agents.png)
 
 
-이게 안보여서 매뉴얼 모드로 띄워보았다.
 
 ## [Mananual mode](https://www.elastic.co/guide/en/ingest-management/current/ingest-management-getting-started.html#agent-standalone-mode)
 
@@ -181,13 +180,31 @@ outputs:
 
 elastic-agent 실행
 ```console
-./elastic-agent run
+./elastic-agent run --insecure
 ```
-
-... 매뉴얼 모드도 최종 결과대로는 안나옴.. 자야겠
 
 # alert & action
 
+- [Alerting and Actions](https://www.elastic.co/guide/en/kibana/7.9/alerting-getting-started.html)
+
+cf. [Elasticsearch alerting](https://www.elastic.co/guide/en/kibana/7.9/watcher-ui.html)
+
+- [Defining alerts](https://www.elastic.co/guide/en/kibana/7.9/defining-alerts.html)
+
+## [Slack Action Type](https://www.elastic.co/guide/en/kibana/7.9/slack-action-type.html)
+
+kibana 서버에서 slack 에 접근할 수 있도록 작업이 되어 있어야 한다
+
+```xml
+# kibnana.yml
+xpack.actions.whitelistedHosts=[""]
+
+my-slack:
+   name: preconfigured-slack-action-type
+   actionTypeId: .slack
+   config:
+     webhookUrl: 'https://hooks.slack.com/services/abcd/efgh/ijklmnopqrstuvwxyz'
+```
 
 # 참고
 - https://jjeong.tistory.com/1503
