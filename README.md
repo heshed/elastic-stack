@@ -126,7 +126,7 @@ cp elasticsearch-7.9.1/kibana/elasticsearch-ca.pem kibana-7.9.2-darwin-x86_64/co
 ```
 mkcert -install
 mkcert -cert-file config/kibana-server-crt.pem -key-file config/kibana-server-key.pem localhost 127.0.0.1 ::1
-bin/kibana-keystore add server.ssl.keystore.password
+bin/kibana-keystore add server.ssl.keyPassphrase
 ```
 
 
@@ -141,7 +141,6 @@ elasticsearch.ssl.truststore.password: ""
 elasticsearch.ssl.certificateAuthorities: [ "config/elasticsearch-ca.pem" ]
 
 server.ssl.enabled: true
-server.ssl.keystore.path: "config/kibana-server.p12"
 server.ssl.certificate: "config/kibana-server-crt.pem"
 server.ssl.key: "config/kibana-server-key.pem"
 
@@ -195,8 +194,7 @@ Fleet 으로 진행해보자. 페이지를 열고 따라하기
 ## 최종 화면에 보이는 elastic-agent 커맨드를 수행
 
 ```console
-#  --insecure 를 붙여줘야 한다
-./elastic-agent enroll http://localhost:5601 ak9ENXdIUUJWWUZqWXVvUlpWTl86akJNSG10UHpRZVNGUnduNlN5QTV6Zw== --insecure
+./elastic-agent enroll https://localhost:5601 ak9ENXdIUUJWWUZqWXVvUlpWTl86akJNSG10UHpRZVNGUnduNlN5QTV6Zw==
 ./elastic-agent run
 ```
 
@@ -223,7 +221,7 @@ outputs:
 
 elastic-agent 실행
 ```console
-./elastic-agent run --insecure
+./elastic-agent run
 ```
 
 # alert & action
