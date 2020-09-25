@@ -1,6 +1,6 @@
 
 ```console
-➜  elasticsearch-7.9.1 bin/elasticsearch-certutil http
+bin/elasticsearch-certutil http
 
 ## Elasticsearch HTTP Certificate Utility
 
