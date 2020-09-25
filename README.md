@@ -105,7 +105,6 @@ cd kibana-7.9.2-darwin-x86_64
 ## config/kibana.yml
 
 ```yaml
-46,47c46,50
 elasticsearch.username: "kibana_system"
 elasticsearch.password: "elastic"
 elasticsearch.ssl.truststore.path: elastic-stack-ca.p12
