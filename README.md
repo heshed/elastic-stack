@@ -278,6 +278,25 @@ outputs:
 https://github.com/elastic/kibana/issues/75913
 이글 보면 최근까지 yml output에 추가할 cert 필드들에 대한 논의 진행중
 
+## 성공한 케이스
+
+./elastic-agent run 수행 후 생성된 action_store.yml 을 아래와 같이 수정하자.
+
+```yaml
+  outputs:
+    default:
+      api_key: 9JirxXQB_skBDLpQhISc:ewkFLURjTw-ozobpWsQUCw
+      hosts:
+      - https://localhost:9200
+      type: elasticsearch
+      ssl.certificate_authorities: ["/Users/md/workspace/es/elastic-agent-7.9.1-darwin-x86_64/elasticsearch-ca.pem"]
+  revision: 2
+```
+
+Observility -> Metrics 이 확인됨. 이제 Alert 를 셋팅해보자.
+
+![](https://user-images.githubusercontent.com/1585417/94282159-7616d900-ff8a-11ea-993c-d43947b1083f.png)
+
 # alert & action
 
 - [Alerting and Actions](https://www.elastic.co/guide/en/kibana/7.9/alerting-getting-started.html)
@@ -300,6 +319,10 @@ my-slack:
    config:
      webhookUrl: 'https://hooks.slack.com/services/abcd/efgh/ijklmnopqrstuvwxyz'
 ```
+
+슬랙, Webhook, Email은 Gold License 부터임.. 아뿔사
+
+![](https://user-images.githubusercontent.com/1585417/94282839-40262480-ff8b-11ea-94e3-c2d3791869d4.png)
 
 # 참고
 - https://jjeong.tistory.com/1503
