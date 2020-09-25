@@ -29,11 +29,22 @@ bin/elasticsearch-certutil ca
 # 이것도 다 엔터
 # elastic-stack-ca.p12
 bin/elasticsearch-certutil cert --ca elastic-stack-ca.p12
+```
 
-# Optional: Generate additional certificates specifically for encrypting HTTP client communications.
-# 필요 없을 듯 하지만 일단 엔터
-# elasticsearch-ssl-http.zip
+http client 용 ca 생성
+- `Do you wish to change any of these options? [y/N]` 물어볼때 `y` 로 입력 후
+- CN=localhost 로 입력
+- [elasticsearch-certutil http](elasticsearch-certutil-http.md) 참고
+```
 bin/elasticsearch-certutil http
+```
+
+생성된 ssl http 인증서 사용
+```
+unzip elasticsearch-ssl-http.zip
+cp elasticsearch/http.p12 config/
+
+bin/elasticsearch-keystore add xpack.security.http.ssl.keystore.secure_password
 ```
 
 ## config/elasticsearch.yml
@@ -46,6 +57,12 @@ xpack.security.transport.ssl.enabled: true
 xpack.security.transport.ssl.verification_mode: certificate
 xpack.security.transport.ssl.keystore.path: elastic-stack-ca.p12
 xpack.security.transport.ssl.truststore.path: elastic-stack-ca.p12
+
+# This turns on SSL for the HTTP (Rest) interface
+xpack.security.http.ssl.enabled: true
+xpack.security.http.ssl.keystore.path: http.p12
+xpack.security.http.ssl.truststore.path: http.p12
+xpack.security.http.ssl.client_authentication: optional
 ```
 
 ## add the password to your Elasticsearch keystore
@@ -100,18 +117,30 @@ Changed password for user [elastic]
 ```
 tar xvfz kibana-7.9.2-darwin-x86_64.tar.gz
 cd kibana-7.9.2-darwin-x86_64
+
+# http pem 인증서를 복사
+cp elasticsearch-7.9.1/kibana/elasticsearch-ca.pem kibana-7.9.2-darwin-x86_64/config
 ```
 
 ## config/kibana.yml
+
 
 ```yaml
 elasticsearch.username: "kibana_system"
 elasticsearch.password: "elastic"
 elasticsearch.ssl.truststore.path: elastic-stack-ca.p12
 elasticsearch.ssl.truststore.password: ""
-elasticsearch.hosts: ["http://localhost:9200"]
+elasticsearch.ssl.certificateAuthorities: [ "config/elasticsearch-ca.pem" ]
+elasticsearch.hosts: ["https://localhost:9200"]
 xpack.ingestManager.fleet.tlsCheckDisabled: true
 xpack.encryptedSavedObjects.encryptionKey: a123456789012345678901234567890b
+```
+
+- TODO kibana https localhost 서빙이 되어야 한다.
+  - injest management 실행하니 es 에 아래의 메시지가 출력되면서 metric이 저장되지 않는 현상
+  
+```console
+[2020-09-25T10:51:10,690][WARN ][o.e.x.s.t.n.SecurityNetty4HttpServerTransport] [mdui-MacBookPro.local] received plaintext http traffic on an https channel, closing connection Netty4HttpChannel{localAddress=/127.0.0.1:9200, remoteAddress=/127.0.0.1:59409}
 ```
 
 ## kibana 실행
